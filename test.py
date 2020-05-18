@@ -21,12 +21,12 @@ batch_size = 32
 progress = 0
 
 sickTraining = []
-for filename in os.listdir("c:/Users/warri/Desktop/respire/audio/audio/test/sick"):
-    sickTraining.append("c:/Users/warri/Desktop/respire/audio/audio/test/sick/" + filename)
+for filename in os.listdir("c:/Users/warri/Desktop/respire/audio/audio/train/sick"):
+    sickTraining.append("c:/Users/warri/Desktop/respire/audio/audio/train/sick/" + filename)
 
 not_sickTraining = []
-for notsickfile in os.listdir("c:/Users/warri/Desktop/respire/audio/audio/test/not_sick"):
-    not_sickTraining.append("c:/Users/warri/Desktop/respire/audio/audio/test/not_sick/" + notsickfile)
+for notsickfile in os.listdir("c:/Users/warri/Desktop/respire/audio/audio/train/not_sick"):
+    not_sickTraining.append("c:/Users/warri/Desktop/respire/audio/audio/train/not_sick/" + notsickfile)
 
 totalValidationArray = []
 totalValidationArrayLabels = []
@@ -59,9 +59,6 @@ totalValidationArrayLabels = numpy.array(totalValidationArrayLabels)
 print(totalValidationArray.shape)
 print(totalValidationArrayLabels)
 
-training_data_x = pd.DataFrame(data=totalValidationArray[0:1])
-print(training_data_x.shape)
-
 model = tf.keras.Sequential([
     tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dense(1, activation='sigmoid')
@@ -72,8 +69,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 print("starting training")
-model.fit(totalValidationArray, totalValidationArrayLabels, epochs=10, batch_size=batch_size)
-
+model.fit(totalValidationArray, totalValidationArrayLabels, epochs=5, batch_size=batch_size)
 print(model.evaluate(totalValidationArray, totalValidationArrayLabels))
 
 ## TEST DATA
@@ -85,26 +81,35 @@ not_sickTrainingTest = []
 for notsickfile in os.listdir("c:/Users/warri/Desktop/respire/audio/audio/test/not_sick"):
     not_sickTraining.append("c:/Users/warri/Desktop/respire/audio/audio/test/not_sick/" + notsickfile)
 
-totalValidationArray = []
-totalValidationArrayLabels = []
-MAX_SIZE = 300000
-## Convert validation data into arraylist of validation arrays
-for file in sickTraining:
+totalTestArray = []
+
+# Convert test data into arraylist of test arrays
+for file in sickTraining[0:9]:
     a = read(file)
+    print(file)
     numberArray = numpy.array(a[1], dtype=float)
     result = numpy.zeros(MAX_SIZE)
     result[:numberArray.shape[0]] = numberArray
-    totalValidationArray.append(result)
-    totalValidationArrayLabels.append(1)
+    totalTestArray.append(result)    
     progress+=1
     print(progress)
 
-for file in not_sickTraining:
+for file in not_sickTraining[0:9]:
     a = read(file)
     numberArray = numpy.array(a[1], dtype=float)
+    print(file)
     result = numpy.zeros(MAX_SIZE)
     result[:numberArray.shape[0]] = numberArray
-    totalValidationArray.append(result)    
-    totalValidationArrayLabels.append(0)
+    totalTestArray.append(result)    
     progress+=1
     print(progress)
+
+model.save('cough_reader.model')
+new_model = tf. keras.models.load_model('cough_reader.model')
+totalTestArray = numpy.array(totalTestArray)
+predictions = new_model.predict(totalTestArray)
+
+##printing predictions
+for prediction in predictions:
+    print(numpy.argmax(prediction))
+
