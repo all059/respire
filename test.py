@@ -16,7 +16,7 @@ from tensorflow.keras.layers.experimental.preprocessing import Normalization
 ## TODO: test model on training data, test model on test data
 ## get an accuracy we are happy with
 
-## standard convention
+## Standard convention for batch size; a batch size is the number of training examples used in one epoch
 batch_size = 32
 
 ## Convert training data into arraylist of training arrays
