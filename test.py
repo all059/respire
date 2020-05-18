@@ -85,7 +85,7 @@ for notsickfile in os.listdir("c:/Users/warri/Desktop/respire/audio/audio/test/n
 
 totalTestArray = []
 
-# Convert test data into arraylist of test arrays
+# Convert testing data into arraylist of test arrays
 for file in sickTrainingTest[0:9]:
     a = read(file)
     print(file)
