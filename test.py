@@ -19,7 +19,7 @@ from tensorflow.keras.layers.experimental.preprocessing import Normalization
 ## standard convention
 batch_size = 32
 
-## Convert training data into arraylist of test arrays
+## Convert training data into arraylist of training arrays
 progress = 0
 
 sickTraining = []
@@ -74,7 +74,7 @@ print("starting training")
 model.fit(totalValidationArray, totalValidationArrayLabels, epochs=5, batch_size=batch_size)
 print(model.evaluate(totalValidationArray, totalValidationArrayLabels))
 
-## TEST DATA
+## Convert test data into arraylist of test arrays
 sickTrainingTest = []
 for filename in os.listdir("c:/Users/warri/Desktop/respire/audio/audio/test/sick"):
     sickTraining.append("c:/Users/warri/Desktop/respire/audio/audio/test/sick/" + filename)
