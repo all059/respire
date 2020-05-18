@@ -3,9 +3,11 @@ import scipy.io as sio
 import numpy
 import os
 import pandas as pd
+from tensorflow.python.keras.layers import Dense
+from tensorflow.python.keras.models import Sequential
 from tensorflow import keras
 from tensorflow.keras import layers
-from keras.models import Sequential
+# from keras.models import Sequential
 from scipy.io.wavfile import read
 from tensorflow.keras.layers.experimental.preprocessing import Normalization
 
@@ -84,7 +86,7 @@ for notsickfile in os.listdir("c:/Users/warri/Desktop/respire/audio/audio/test/n
 totalTestArray = []
 
 # Convert test data into arraylist of test arrays
-for file in sickTraining[0:9]:
+for file in sickTrainingTest[0:9]:
     a = read(file)
     print(file)
     numberArray = numpy.array(a[1], dtype=float)
@@ -94,7 +96,7 @@ for file in sickTraining[0:9]:
     progress+=1
     print(progress)
 
-for file in not_sickTraining[0:9]:
+for file in not_sickTrainingTest[0:9]:
     a = read(file)
     numberArray = numpy.array(a[1], dtype=float)
     print(file)
@@ -108,6 +110,7 @@ model.save('cough_reader.model')
 new_model = tf. keras.models.load_model('cough_reader.model')
 totalTestArray = numpy.array(totalTestArray)
 predictions = new_model.predict(totalTestArray)
+
 
 ##printing predictions
 for prediction in predictions:
